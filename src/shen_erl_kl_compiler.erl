@@ -31,9 +31,10 @@
                   'kl_types',
                   'kl_yacc',
                   'kl_init',
+                  'kl_extension-expand-dynamic',
                   'kl_extension-features',
-                  'kl_extension-launcher',
-                  'kl_extension-factorise-defun']).
+                  'kl_extension-launcher'
+                 ]).
 
 %% Types
 -type opt() :: {output_dir, string()}.

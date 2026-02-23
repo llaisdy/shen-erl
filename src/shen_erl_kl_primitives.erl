@@ -4,7 +4,7 @@
 %%%-------------------------------------------------------------------
 -module(shen_erl_kl_primitives).
 
-%% kl_extension-factorise-defun is compiled from KLambda at build time and absent during Dialyzer analysis
+%% kl_extension module are compiled from KLambda at build time and absent during Dialyzer analysis
 -dialyzer({nowarn_function, ['eval-kl'/1]}).
 
 %% API

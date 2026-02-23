@@ -23,7 +23,11 @@
          'read-file-as-bytelist'/1,
          'shen.read-file-as-charlist'/1,
          'read-file-as-string'/1,
-         'cd'/1]).
+         'cd'/1,
+         'shen.char-stoutput?'/1,
+         'shen.write-string'/2,
+         'shen.char-stinput?'/1,
+         'shen.read-unit-string'/1]).
 
 %%%===================================================================
 %%% API
@@ -85,6 +89,7 @@ hash(Val, Bound) ->
 
 %% Files
 'read-file-as-bytelist'({string, Filename}) ->
+  io:format(standard_error, "read-file-as-bytelist: ~p~n", [Filename]),
   {ok, Binary} = file:read_file(Filename),
   binary_to_list(Binary).
 
@@ -101,3 +106,21 @@ hash(Val, Bound) ->
 'cd'(DirStr = {string, Dir}) ->
   shen_erl_kl_primitives:set('*home-directory*', DirStr),
   file:set_cwd(Dir).
+
+%% Character stream predicates (40.1+)
+%% Standard I/O streams are character-based; file ports are byte-based.
+'shen.char-stoutput?'(standard_io) -> true;
+'shen.char-stoutput?'(_Stream) -> false.
+
+'shen.write-string'({string, Str}, Stream) ->
+  io:put_chars(Stream, Str),
+  {string, Str}.
+
+'shen.char-stinput?'(standard_io) -> true;
+'shen.char-stinput?'(_Stream) -> false.
+
+'shen.read-unit-string'(Stream) ->
+  case io:get_chars(Stream, [], 1) of
+    [Char] -> {string, [Char]};
+    eof    -> {string, ""}
+  end.
