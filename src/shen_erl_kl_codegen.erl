@@ -217,6 +217,10 @@ compile_exp(['%%goto-label', Label | Args], Env) ->
 compile_exp(['%%return', Exp], Env) ->
   compile_exp(Exp, Env);
 
+%% Type annotations: (type X T) is identity on X at runtime
+compile_exp([type, Exp, _Type], Env) ->
+  compile_exp(Exp, Env);
+
 %% Function call optimizations
 
 compile_exp(['intern', {string, SymbolStr}], _Env) ->
