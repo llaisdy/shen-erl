@@ -9,6 +9,8 @@
          start_time/0,
          get_mfa/1,
          set_mfa/2,
+         get_all_mfa_names/0,
+         delete_mfa/1,
          get_val/1,
          set_val/2,
          get_varname/0,
@@ -72,6 +74,15 @@ get_mfa(FunName) ->
 -spec set_mfa(atom(), mfa()) -> ok.
 set_mfa(FunName, MFA) ->
   set_mfa(FunName, MFA, true),
+  ok.
+
+-spec get_all_mfa_names() -> [atom()].
+get_all_mfa_names() ->
+  [Name || {Name, _} <- ets:tab2list(?FUNCTIONS_STORE_NAME)].
+
+-spec delete_mfa(atom()) -> ok.
+delete_mfa(FunName) ->
+  ets:delete(?FUNCTIONS_STORE_NAME, FunName),
   ok.
 
 -spec get_val(atom()) -> {ok, term()} | not_found.

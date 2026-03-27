@@ -27,7 +27,11 @@
          'shen.char-stoutput?'/1,
          'shen.write-string'/2,
          'shen.char-stinput?'/1,
-         'shen.read-unit-string'/1]).
+         'shen.read-unit-string'/1,
+         'shen.function-names'/0,
+         'shen.undefine-function'/1,
+         'shen.save-snapshot'/0,
+         'shen.restore-snapshot'/0]).
 
 %%%===================================================================
 %%% API
@@ -123,4 +127,25 @@ hash(Val, Bound) ->
   case io:get_chars(Stream, [], 1) of
     [Char] -> {string, [Char]};
     eof    -> {string, ""}
+  end.
+
+%% Test-harness utilities: snapshot / restore MFA table between test groups
+'shen.function-names'() ->
+  shen_erl_global_stores:get_all_mfa_names().
+
+'shen.undefine-function'(FunName) ->
+  shen_erl_global_stores:delete_mfa(FunName).
+
+'shen.save-snapshot'() ->
+  put(shen_test_snapshot, shen_erl_global_stores:get_all_mfa_names()),
+  ok.
+
+'shen.restore-snapshot'() ->
+  case get(shen_test_snapshot) of
+    undefined -> ok;
+    Snapshot ->
+      Current = shen_erl_global_stores:get_all_mfa_names(),
+      New = Current -- Snapshot,
+      lists:foreach(fun(N) -> shen_erl_global_stores:delete_mfa(N) end, New),
+      ok
   end.
