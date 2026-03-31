@@ -31,7 +31,8 @@
          'shen.function-names'/0,
          'shen.undefine-function'/1,
          'shen.save-snapshot'/0,
-         'shen.restore-snapshot'/0]).
+         'shen.restore-snapshot'/0,
+         'shen.copy-file'/2]).
 
 %%%===================================================================
 %%% API
@@ -93,7 +94,6 @@ hash(Val, Bound) ->
 
 %% Files
 'read-file-as-bytelist'({string, Filename}) ->
-  io:format(standard_error, "read-file-as-bytelist: ~p~n", [Filename]),
   {ok, Binary} = file:read_file(Filename),
   binary_to_list(Binary).
 
@@ -135,6 +135,10 @@ hash(Val, Bound) ->
 
 'shen.undefine-function'(FunName) ->
   shen_erl_global_stores:delete_mfa(FunName).
+
+'shen.copy-file'({string, Src}, {string, Dst}) ->
+  {ok, _} = file:copy(Src, Dst),
+  ok.
 
 'shen.save-snapshot'() ->
   put(shen_test_snapshot, shen_erl_global_stores:get_all_mfa_names()),
