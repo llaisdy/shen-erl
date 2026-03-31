@@ -105,17 +105,17 @@ DOCKER_ERLANG_IMAGE = erlang:27.3
 .PHONY: docker-test
 docker-test:
 	@docker run --rm \
-							--volume "$(BASE_DIR)":/app \
-							--volume "$(BASE_DIR)/Erlmakefile":/app/Makefile \
-							--workdir /app \
-							$(DOCKER_ERLANG_IMAGE) \
-							/bin/bash -c "make tests"
+		--volume "$(BASE_DIR)":/app \
+		--volume "$(BASE_DIR)/Erlmakefile":/app/Makefile \
+		--workdir /app \
+		$(DOCKER_ERLANG_IMAGE) \
+		/bin/bash -c "make tests"
 
 .PHONY: docker-dialyze
 docker-dialyze:
 	@docker run --rm \
-							--volume "$(BASE_DIR)":/app \
-							--volume "$(BASE_DIR)/Erlmakefile":/app/Makefile \
-							--workdir /app \
-							$(DOCKER_ERLANG_IMAGE) \
-							/bin/bash -c "make dialyze"
+		--volume "$(BASE_DIR)":/app \
+		--volume "$(BASE_DIR)/Erlmakefile":/app/Makefile \
+		--workdir /app \
+		$(DOCKER_ERLANG_IMAGE) \
+		/bin/bash -c "make dialyze"
